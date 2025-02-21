@@ -44,7 +44,7 @@ resource "aws_instance" "web_server" {
   ami           = "ami-053a45fff0a704a47"  # Specify the AMI ID (e.g., Amazon Linux 2 or Ubuntu)
   instance_type = "t2.micro"      # Choose the desired instance type
   key_name      = "mymachinekeypair" # Specify your SSH key for access
-  security_groups = [aws_security_group.default.id]
+  security_groups = [aws_security_group.instance_sg.id]
   subnet_id     = aws_subnet.subnet_a.id
   # User data to install NGINX and configure a custom index page
   user_data = <<-EOF
@@ -74,9 +74,6 @@ resource "aws_instance" "web_server" {
   tags = {
     Name = "nginx-web-server"
   }
-
-  # Security group configuration (optional, if you don't have one defined already)
-  security_groups = ["default"]
 
   # If using a VPC, you might need to provide subnet_id, etc.
   # subnet_id = "subnet-xxxxxxxx"
