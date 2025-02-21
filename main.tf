@@ -110,7 +110,7 @@ resource "aws_lb_target_group" "tg" {
   vpc_id   = aws_vpc.main.id
 }
 
-resource "aws_alb_listener" "http" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
