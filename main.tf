@@ -108,16 +108,6 @@ resource "aws_lb_target_group" "tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
-
-  health_check {
-        path = "/api/1/resolve/default?path=/service/my-service"
-        port = 2001
-        healthy_threshold = 6
-        unhealthy_threshold = 2
-        timeout = 2
-        interval = 5
-        matcher = "200"  # has to be HTTP 200 or fails
-      }
 }
 
 resource "aws_alb_listener" "http" {
