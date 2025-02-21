@@ -120,26 +120,6 @@ resource "aws_alb_listener" "http" {
     target_group_arn = aws_lb_target_group.tg.arn
   }
 }
-# An example of a Listener rule
-resource "aws_alb_listener_rule" "rule-1" {
-    action {
-      type = "forward"
-      target_group_arn = "${aws_lb_target_group.tg.arn}"
-     }
-     condition {
-           path_pattern {
-                   values = ["/api/1/resolve/default"]
-                  }
-
-             }
-                  #  condition {
-                  # field  = "path-pattern"
-                  #values = ["/api/1/resolve/default"]
-                  #  }
-
-    listener_arn = "${aws_alb_listener.http.id}"
-    priority = 100
-}
 
 resource "aws_instance" "web1" {
   ami           = "ami-053a45fff0a704a47" # Use a valid AMI for your region
