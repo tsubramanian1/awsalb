@@ -132,18 +132,18 @@ resource "aws_instance" "web1" {
   user_data = <<-EOF
         #cloud-boothook
         #!/bin/bash
-        echo "Starting user data script" > /tmp/user_data.log
-        yum update -y >> /tmp/user_data.log 2>&1
-        amazon-linux-extras enable nginx1 >> /tmp/user_data.log 2>&1
-        yum install -y nginx >> /tmp/user_data.log 2>&1
-        systemctl start nginx >> /tmp/user_data.log 2>&1
-        systemctl enable nginx >> /tmp/user_data.log 2>&1
-        echo "User data script finished" >> /tmp/user_data.log
-        # Create a custom index.html page
-        echo "<html><body><h1>Welcome to My Custom NGINX Server</h1></body></html>" > /usr/share/nginx/html/index.html
-
-        # Log end of user data execution
-        echo "User data script finished" >> /tmp/user_data.log
+        if ! sudo yum update -y; then
+          echo "YUM update failed"
+          exit 1
+        fi
+        sudo yum install -y httpd
+        sudo systemctl start httpd
+        if ! sudo systemctl is-active --quiet httpd; then
+          echo "Apache failed to start"
+          exit 1
+        fi
+        sudo systemctl enable httpd
+        echo "<h1>Hello friend! This is $(hostname -f)</h1>" | sudo tee /var/www/html/index.html > /dev/null
     EOF
 }
 
