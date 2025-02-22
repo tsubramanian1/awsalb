@@ -141,22 +141,7 @@ resource "aws_instance" "web1" {
   tags = {
     Name = "web1"
   }
-  user_data = <<-EOF
-        #cloud-boothook
-        #!/bin/bash
-        if ! sudo yum update -y; then
-          echo "YUM update failed"
-          exit 1
-        fi
-        sudo yum install -y httpd
-        sudo systemctl start httpd
-        if ! sudo systemctl is-active --quiet httpd; then
-          echo "Apache failed to start"
-          exit 1
-        fi
-        sudo systemctl enable httpd
-        echo "<h1>Hello friend! This is $(hostname -f)</h1>" | sudo tee /var/www/html/index.html > /dev/null
-    EOF
+  user_data = file("userdata.sh")
 }
 
 
@@ -168,22 +153,7 @@ resource "aws_instance" "web2" {
   tags = {
     Name = "web2"
   }
-  user_data = <<-EOT
-          #cloud-boothook
-          #!/bin/bash
-          if ! sudo yum update -y; then
-             echo "YUM update failed"
-             exit 1
-          fi
-          sudo yum install -y httpd
-          sudo systemctl start httpd
-          if ! sudo systemctl is-active --quiet httpd; then
-             echo "Apache failed to start"
-             exit 1
-          fi
-          sudo systemctl enable httpd
-          echo "<h1>Hello friend! This is $(hostname -f)</h1>" | sudo tee /var/www/html/index.html > /dev/null
-      EOT
+  user_data = file("userdata.sh")
 }
 
 resource "aws_lb_target_group_attachment" "web1_attachment" {
