@@ -95,6 +95,18 @@ resource "aws_route" "internet_route" {
         gateway_id = aws_internet_gateway.my_internet_gateway.id
       }
 
+# Associate the route table with the subnet a
+resource "aws_route_table_association" "subneta_association" {
+  subnet_id      = aws_subnet.subnet_a.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+# Associate the route table with the subnet b
+resource "aws_route_table_association" "subnetb_association" {
+  subnet_id      = aws_subnet.subnet_b.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
 resource "aws_lb" "main" {
   name               = "main-alb"
   internal           = false
